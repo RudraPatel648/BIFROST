@@ -3,25 +3,23 @@ using namespace std;
 
 class Edge
 {
-    string destination;
     float distance;
     float time;
     int cost;
-public:
+    public:
     Edge(vector<string> components){
-        this->destination = components[1];
         this->distance = stof(components[2]);
         this->time = stof(components[3]);
         this->cost = stoi(components[4]);
     }
 };
+unordered_map<string, vector<pair<string , Edge>>> network;
 
 int main()
 {
-    unordered_map<string, vector<Edge>> network;
-
+    network.clear();
     fstream networkFile;
-    networkFile.open("network.txt", ios::in);
+    networkFile.open("../data/network-test.txt", ios::in);
     if (networkFile.is_open())
     {
         string line;
@@ -45,12 +43,12 @@ int main()
             }
             //Creating Node for Current Line
             Edge edge(lineComponents);
-            string &source = lineComponents[0];
-            network[source].push_back(edge);
+            string &locA = lineComponents[0];
+            string &locB = lineComponents[1];
+            network[locA].push_back({locB , edge});
+            network[locB].push_back({locA , edge});
 
         }
         networkFile.close();
     }
-
-
 }
