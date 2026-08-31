@@ -2,42 +2,45 @@
 
 Bifrost is a C++ CLI-based weighted graph project focused on pathfinding and network analysis using Data Structures and Algorithms.
 
-The project models a network of interconnected locations and aims to explore different graph algorithms through a practical, scalable implementation.
+The project models a network of interconnected locations and explores graph algorithms through a practical, scalable implementation.
 
 ## Current Status
 
-Currently, Bifrost can:
+Bifrost currently can:
 
-- Load a network from a `.txt` dataset
-- Parse locations and their connection properties
-- Construct an undirected weighted graph in memory
+- [x] Load a network from a `.txt` dataset
+- [x] Parse locations and their connection properties
+- [x] Construct an undirected weighted graph in memory
+- [x] Perform BFS traversal
+- [x] Perform DFS traversal
+- [x] Check reachability between two locations
+- [x] Find connected components
+- [x] Determine network connectivity
+- [x] Find a minimum-weight path using Dijkstra's algorithm
+- [x] Reconstruct the path found by Dijkstra
 
 ## Future Features
 
-- [ ] BFS & DFS based network analysis
-- [ ] Shortest path using Dijkstra's algorithm
+- [ ] Route analysis using distance, time and cost
 - [ ] Advanced pathfinding using A*
-- [ ] Network and path analysis
 - [ ] Algorithm benchmarking
-- [ ] CMake-based build system
 - [ ] Improved CLI interface using FTXUI
+- [ ] CMake-based build system
 
 ## Dataset
 
 Bifrost currently parses its network data using the file system because the dataset is small and easy to manage during development.
 
-As the network grows to 1,000+ nodes and a much larger number of connections, the project may transition to PostgreSQL for persistent and scalable data storage.
+As the network grows to 1,000+ nodes and a much larger number of connections, the project may transition to PostgreSQL for persistent and scalable data storage. *shhh* 🤫
 
 The network is represented as an **undirected weighted graph**, allowing connections to be traversed in both directions.
 
-Example dataset format:
+### Example Dataset Format
 
-```text
 Source,Destination,Distance,Time,Cost
 Mumbai,Surat,280,4.5,500
 Surat,Vadodara,150,2.5,300
 Vadodara,Ahmedabad,110,2.0,250
-```
 
 ## Tech Stack
 

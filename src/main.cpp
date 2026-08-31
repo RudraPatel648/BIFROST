@@ -2,14 +2,12 @@
 #include "Graph.h"
 using namespace std;
 
-
-
 int main()
 {
+    //temp - testing functions
     Graph bifrost;
-    bifrost.loadNetwork("network-test");
-    bifrost.checkConnection();
-    cout<<endl;
-    bifrost.loadNetwork("network-india");
-    bifrost.checkConnection();
+    bifrost.loadNetwork("network-test02");
+    string source, destination ;
+    cin>>source>>destination;
+    bifrost.getShortestPathDijkstra(source , destination);
 }

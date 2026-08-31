@@ -4,6 +4,7 @@ void Graph::loadNetwork(string fileName)
 {
     network.clear();
     networkElements.clear();
+
     string URL = "../data/" + fileName + ".txt";
     fstream networkFile;
     unordered_map<string, int> visited;
@@ -54,14 +55,15 @@ void Graph::loadNetwork(string fileName)
     }
 }
 
-void Graph::checkConnectionDFS(string &current ,int &component , unordered_map<int , vector<string>> &components,unordered_map<string , int> &visited){
+void Graph::checkConnectionDFS(string &current, int &component, unordered_map<int, vector<string>> &components, unordered_map<string, int> &visited)
+{
     components[component].push_back(current);
-    for(auto nei : network[current])
+    for (auto nei : network[current])
     {
-        if(!visited[nei.first])
+        if (!visited[nei.first])
         {
             visited[nei.first]++;
-            checkConnectionDFS(nei.first , component , components , visited);
+            checkConnectionDFS(nei.first, component, components, visited);
         }
     }
 }
@@ -81,7 +83,7 @@ void Graph::checkConnection()
         }
     }
 
-    // temp
+    // temp - Checking whether function is working fine or not
     cout << "Total Nodes : " << networkElements.size() << endl;
     if (components.size() <= 1)
         cout << "Components Status : Connected" << endl;
@@ -137,4 +139,64 @@ bool Graph::checkReachabilityBFS(string &current, string &target, unordered_map<
         }
     }
     return false;
+}
+
+vector<string> Graph::getShortestPathDijkstra(string &source, string &destination)
+{
+    if (source == destination)
+    {
+        cout << "Already At Destination" << endl;
+        return {"Already At Destination"};
+    }
+
+    unordered_map<string, int> distance;
+    unordered_map<string, string> parent;
+    priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> minHeap;
+
+    parent[source] = source;
+    minHeap.push({0, source});
+    distance[source] = 0;
+
+    while (!minHeap.empty())
+    {
+        string node = minHeap.top().second;
+        int dis = minHeap.top().first;
+        minHeap.pop();
+        if (dis > distance[node])
+            continue;
+
+        for (auto nei : network[node])
+        {
+            if (distance.find(nei.first) == distance.end() || dis + nei.second.cost < distance[nei.first])
+            {
+                distance[nei.first] = dis + nei.second.cost;
+                parent[nei.first] = node;
+                minHeap.push({distance[nei.first], nei.first});
+            }
+        }
+    }
+
+    if (parent.find(destination) == parent.end())
+    {
+        cout << "Can't Reach Destination" << endl;
+        return {"Can't Reach Destination"};
+    }
+
+    vector<string> path;
+    string node = destination;
+    while (parent[node] != node)
+    {
+        path.push_back(node);
+        node = parent[node];
+    }
+    path.push_back(source);
+    reverse(path.begin(), path.end());
+
+    // temp - Cheking whether function is working fine or not
+    cout << "Minimum Cost : Rs." << distance[destination] << endl;
+    cout << "Path : ";
+    for (auto it : path)
+        cout << it << " ";
+
+    return path;
 }

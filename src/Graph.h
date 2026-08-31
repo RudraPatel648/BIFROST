@@ -6,6 +6,7 @@ using namespace std;
 
 class Edge
 {
+public: //temp public , need to change afterwards
     float distance;
     float time;
     int cost;
@@ -17,6 +18,7 @@ public:
         time = stof(components[3]);
         cost = stoi(components[4]);
     }
+
 };
 
 class Graph
@@ -30,6 +32,7 @@ public:
     void checkConnectionDFS(string &current ,int &component , unordered_map<int , vector<string>> &components,unordered_map<string , int> &visited);
     bool checkReachabilityBFS(string &current, string &target, unordered_map<string, int> &visited);
     bool checkReachabilityDFS(string &current, string &target, unordered_map<string, int> &visited);
+    vector<string> getShortestPathDijkstra(string &src , string &dest);
 };
 
 #endif
