@@ -15,7 +15,6 @@ void Graph::loadNetwork(string fileName)
         string line;
         while (getline(networkFile, line))
         {
-            // Deviding String into Components [ Source , Destination , Distance , Time , Cost]
             vector<string> lineComponents(5, "");
             int i = 0;
             int componentCount = 0;
@@ -33,7 +32,6 @@ void Graph::loadNetwork(string fileName)
                 i++;
             }
 
-            // Creating Node for Current Line
             Edge edge(lineComponents);
             string &locA = lineComponents[0];
             string &locB = lineComponents[1];
@@ -176,6 +174,7 @@ vector<string> Graph::getShortestPathDijkstra(string &source, string &destinatio
         }
     }
 
+    //temp - Need modification when working on UI and Formatting
     if (parent.find(destination) == parent.end())
     {
         cout << "Can't Reach Destination" << endl;
@@ -192,11 +191,39 @@ vector<string> Graph::getShortestPathDijkstra(string &source, string &destinatio
     path.push_back(source);
     reverse(path.begin(), path.end());
 
-    // temp - Cheking whether function is working fine or not
-    cout << "Minimum Cost : Rs." << distance[destination] << endl;
-    cout << "Path : ";
-    for (auto it : path)
-        cout << it << " ";
+    cout<<"---Route Analysis---\n"<<endl;
+    float reqDistance = 0;
+    float reqTime = 0;
+    int reqCost = 0;
+
+    for(int i = 0; i < path.size() - 1 ; i++){
+        string currentNode = path[i];
+        string nextNode = path[i+1];
+        Edge currentEdge;
+        for(auto nei : network[currentNode])
+        {
+            if(nei.first == nextNode)
+                currentEdge = nei.second;
+        }
+
+        cout<<currentNode<<" -> "<<nextNode<<endl;
+        cout<<"Distance : "<<currentEdge.distance<<" Km"<<endl;
+        cout<<"Time : "<<currentEdge.time<<" H"<<endl;
+        cout<<"Cost : "<<currentEdge.cost<<" Rs."<<endl<<endl;
+
+        reqDistance += currentEdge.distance;
+        reqTime += currentEdge.time;
+        reqCost += currentEdge.cost;
+    }
+
+    cout<<"Route : ";
+    for(int i = 0 ; i < path.size()-1 ; i++)
+    cout<<path[i]<<" -> ";
+    cout<<path[path.size() - 1]<<endl;
+
+    cout<<"Distance : "<<reqDistance<<" Km"<<endl;
+        cout<<"Time : "<<reqTime<<" H"<<endl;
+        cout<<"Cost : "<<reqCost<<" Rs."<<endl<<endl;
 
     return path;
 }

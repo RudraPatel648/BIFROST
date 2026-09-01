@@ -12,6 +12,9 @@ public: //temp public , need to change afterwards
     int cost;
 
 public:
+    Edge(){
+        distance = time = cost = 0;
+    }
     Edge(vector<string> components)
     {
         distance = stof(components[2]);
