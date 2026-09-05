@@ -139,7 +139,7 @@ bool Graph::checkReachabilityBFS(string &current, string &target, unordered_map<
     return false;
 }
 
-vector<string> Graph::getShortestPathDijkstra(string &source, string &destination)
+vector<string> Graph::getOptimalPathDijkstra(string &source, string &destination, OptimizeBy criteria)
 {
     if (source == destination)
     {
@@ -147,37 +147,38 @@ vector<string> Graph::getShortestPathDijkstra(string &source, string &destinatio
         return {"Already At Destination"};
     }
 
-    unordered_map<string, int> distance;
+    unordered_map<string, float> optimized;
     unordered_map<string, string> parent;
-    priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> minHeap;
+    priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> minHeap;
 
     parent[source] = source;
     minHeap.push({0, source});
-    distance[source] = 0;
+    optimized[source] = 0;
 
     while (!minHeap.empty())
     {
         string node = minHeap.top().second;
-        int dis = minHeap.top().first;
+        float dis = minHeap.top().first;
         minHeap.pop();
-        if (dis > distance[node])
+        if (dis > optimized[node])
             continue;
 
         for (auto nei : network[node])
         {
-            if (distance.find(nei.first) == distance.end() || dis + nei.second.cost < distance[nei.first])
+            float weight = nei.second.getWeight(criteria);
+            if (optimized.find(nei.first) == optimized.end() || dis + weight < optimized[nei.first])
             {
-                distance[nei.first] = dis + nei.second.cost;
+                optimized[nei.first] = dis + weight;
                 parent[nei.first] = node;
-                minHeap.push({distance[nei.first], nei.first});
+                minHeap.push({optimized[nei.first], nei.first});
             }
         }
     }
 
-    //temp - Need modification when working on UI and Formatting
+    // temp - Need modification when working on UI and Formatting
     if (parent.find(destination) == parent.end())
     {
-        cout << "Can't Reach Destination" << endl;
+        // cout << "Can't Reach Destination" << endl;
         return {"Can't Reach Destination"};
     }
 
@@ -191,39 +192,49 @@ vector<string> Graph::getShortestPathDijkstra(string &source, string &destinatio
     path.push_back(source);
     reverse(path.begin(), path.end());
 
-    cout<<"---Route Analysis---\n"<<endl;
+    cout << "---Route Analysis---\n"
+         << endl;
     float reqDistance = 0;
     float reqTime = 0;
-    int reqCost = 0;
+    float reqCost = 0;
 
-    for(int i = 0; i < path.size() - 1 ; i++){
+    for (int i = 0; i < path.size() - 1; i++)
+    {
         string currentNode = path[i];
-        string nextNode = path[i+1];
-        Edge currentEdge;
-        for(auto nei : network[currentNode])
+        string nextNode = path[i + 1];
+        float currentDistance;
+        float currentTime;
+        float currentCost;
+        for (auto nei : network[currentNode])
         {
-            if(nei.first == nextNode)
-                currentEdge = nei.second;
+            if (nei.first == nextNode)
+                {
+                    currentDistance = nei.second.getWeight(OptimizeBy::DISTANCE);
+                    currentTime = nei.second.getWeight(OptimizeBy::TIME);
+                    currentCost = nei.second.getWeight(OptimizeBy::COST);
+                }
         }
 
-        cout<<currentNode<<" -> "<<nextNode<<endl;
-        cout<<"Distance : "<<currentEdge.distance<<" Km"<<endl;
-        cout<<"Time : "<<currentEdge.time<<" H"<<endl;
-        cout<<"Cost : "<<currentEdge.cost<<" Rs."<<endl<<endl;
+        cout << currentNode << " -> " << nextNode << endl;
+        cout << "Distance : " << currentDistance << " Km" << endl;
+        cout << "Time : " << currentTime << " H" << endl;
+        cout << "Cost : " << currentCost << " Rs." << endl
+             << endl;
 
-        reqDistance += currentEdge.distance;
-        reqTime += currentEdge.time;
-        reqCost += currentEdge.cost;
+        reqDistance += currentDistance;
+        reqTime += currentTime;
+        reqCost += currentCost;
     }
 
-    cout<<"Route : ";
-    for(int i = 0 ; i < path.size()-1 ; i++)
-    cout<<path[i]<<" -> ";
-    cout<<path[path.size() - 1]<<endl;
+    cout << "Route : ";
+    for (int i = 0; i < path.size() - 1; i++)
+        cout << path[i] << " -> ";
+    cout << path[path.size() - 1] << endl;
 
-    cout<<"Distance : "<<reqDistance<<" Km"<<endl;
-        cout<<"Time : "<<reqTime<<" H"<<endl;
-        cout<<"Cost : "<<reqCost<<" Rs."<<endl<<endl;
+    cout << "Distance : " << reqDistance << " Km" << endl;
+    cout << "Time : " << reqTime << " H" << endl;
+    cout << "Cost : " << reqCost << " Rs." << endl
+         << endl;
 
     return path;
 }

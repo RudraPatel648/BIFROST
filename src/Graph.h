@@ -4,12 +4,18 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+enum class OptimizeBy{
+    DISTANCE,
+    TIME,
+    COST
+};
+
 class Edge
 {
-public: //temp public , need to change afterwards
+private:
     float distance;
     float time;
-    int cost;
+    float cost;
 
 public:
     Edge(){
@@ -21,7 +27,19 @@ public:
         time = stof(components[3]);
         cost = stoi(components[4]);
     }
-
+    float getWeight(OptimizeBy criteria){
+        switch (criteria)
+        {
+        case OptimizeBy::DISTANCE:
+            return distance;
+        case OptimizeBy::TIME:
+            return time;
+            case OptimizeBy::COST:
+            return cost;
+        default:
+            return distance;
+        }
+    }
 };
 
 class Graph
@@ -35,7 +53,7 @@ public:
     void checkConnectionDFS(string &current ,int &component , unordered_map<int , vector<string>> &components,unordered_map<string , int> &visited);
     bool checkReachabilityBFS(string &current, string &target, unordered_map<string, int> &visited);
     bool checkReachabilityDFS(string &current, string &target, unordered_map<string, int> &visited);
-    vector<string> getShortestPathDijkstra(string &src , string &dest);
+    vector<string> getOptimalPathDijkstra(string &src , string &dest , OptimizeBy criteria);
 };
 
 #endif
