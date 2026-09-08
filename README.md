@@ -18,39 +18,36 @@ Bifrost currently can:
 - [x] Determine network connectivity
 - [x] Find a minimum-weight path using Dijkstra's algorithm
 - [x] Reconstruct the path found by Dijkstra
+- [x] Route analysis using distance, time and cost
+- [x] Advanced pathfinding using A*
 
 ## Future Features
 
-- [ ] Route analysis using distance, time and cost
-- [ ] Advanced pathfinding using A*
 - [ ] Algorithm benchmarking
-- [ ] Improved CLI interface using FTXUI
-- [ ] CMake-based build system
+- [ ] Polished CLI
 
 ## Dataset
 
 Bifrost currently parses its network data using the file system because the dataset is small and easy to manage during development.
-
-As the network grows to 1,000+ nodes and a much larger number of connections, the project may transition to PostgreSQL for persistent and scalable data storage. *shhh* 🤫
-
 The network is represented as an **undirected weighted graph**, allowing connections to be traversed in both directions.
 
 ### Example Dataset Format
 
-Source,Destination,Distance,Time,Cost
-Mumbai,Surat,280,4.5,500
-Surat,Vadodara,150,2.5,300
-Vadodara,Ahmedabad,110,2.0,250
+<!-- Network -->
+Source Destination Distance Time Cost
+Mumbai Surat 280 4.5 500
+Surat Vadodara 150 2.5 300
+Vadodara Ahmedabad 110 2.0 250
+
+<!-- Coordinates -->
+Mumbai 22.32 72.62
+Surat 22.49 72.65
+Ahmedabad 22.41 72.89
 
 ## Tech Stack
 
 - C++
-- STL
-- Data Structures & Algorithms
-- File Handling
-- PostgreSQL (planned)
-- FTXUI (planned)
-- CMake (planned)
+- C++ STL
 
 ## Why "Bifrost"? 🌈
 

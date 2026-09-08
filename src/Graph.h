@@ -44,9 +44,10 @@ public:
 
 class Graph
 {
+public: //
     unordered_map<string, vector<pair<string, Edge>>> network;
     vector<string> networkElements;
-
+    unordered_map<string,pair<float,float>> coordinates;
 public:
     void loadNetwork(string filename);
     void checkConnection();
@@ -54,6 +55,7 @@ public:
     bool checkReachabilityBFS(string &current, string &target, unordered_map<string, int> &visited);
     bool checkReachabilityDFS(string &current, string &target, unordered_map<string, int> &visited);
     vector<string> getOptimalPathDijkstra(string &src , string &dest , OptimizeBy criteria);
+    vector<string> getOptimalPathAstar(string &src , string &dest , OptimizeBy criteria);
 };
 
 #endif
