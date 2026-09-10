@@ -170,12 +170,12 @@ bool Graph::checkReachabilityBFS(string &current, string &target, unordered_map<
     return false;
 }
 
-vector<string> Graph::getOptimalPathDijkstra(string &source, string &destination, OptimizeBy criteria)
+PathResult Graph::getOptimalPathDijkstra(string &source, string &destination, OptimizeBy criteria)
 {
+    PathResult result;
     if (source == destination)
     {
-        cout << "Already At Destination" << endl;
-        return {"Already At Destination"};
+        return result;
     }
 
     unordered_map<string, float> optimized;
@@ -193,7 +193,7 @@ vector<string> Graph::getOptimalPathDijkstra(string &source, string &destination
         minHeap.pop();
         if (dis > optimized[node])
             continue;
-
+        result.nodeExplored++;
         for (auto nei : network[node])
         {
             float weight = nei.second.getWeight(criteria);
@@ -206,76 +206,73 @@ vector<string> Graph::getOptimalPathDijkstra(string &source, string &destination
         }
     }
 
-    // temp - Need modification when working on UI and Formatting
     if (parent.find(destination) == parent.end())
     {
-        cout << "Can't Reach Destination" << endl;
-        return {"Can't Reach Destination"};
+        return result;
     }
 
-    vector<string> path;
     string node = destination;
     while (parent[node] != node)
     {
-        path.push_back(node);
+        result.path.push_back(node);
         node = parent[node];
     }
-    path.push_back(source);
-    reverse(path.begin(), path.end());
+    result.path.push_back(source);
+    reverse(result.path.begin(), result.path.end());
 
-    cout << "---Route Analysis---\n"
-         << endl;
-    float reqDistance = 0;
-    float reqTime = 0;
-    float reqCost = 0;
+    // cout << "---Route Analysis---\n"
+    //      << endl;
+    // float reqDistance = 0;
+    // float reqTime = 0;
+    // float reqCost = 0;
 
-    for (int i = 0; i < path.size() - 1; i++)
-    {
-        string currentNode = path[i];
-        string nextNode = path[i + 1];
-        float currentDistance;
-        float currentTime;
-        float currentCost;
-        for (auto nei : network[currentNode])
-        {
-            if (nei.first == nextNode)
-            {
-                currentDistance = nei.second.getWeight(OptimizeBy::DISTANCE);
-                currentTime = nei.second.getWeight(OptimizeBy::TIME);
-                currentCost = nei.second.getWeight(OptimizeBy::COST);
-            }
-        }
+    // for (int i = 0; i < path.size() - 1; i++)
+    // {
+    //     string currentNode = path[i];
+    //     string nextNode = path[i + 1];
+    //     float currentDistance;
+    //     float currentTime;
+    //     float currentCost;
+    //     for (auto nei : network[currentNode])
+    //     {
+    //         if (nei.first == nextNode)
+    //         {
+    //             currentDistance = nei.second.getWeight(OptimizeBy::DISTANCE);
+    //             currentTime = nei.second.getWeight(OptimizeBy::TIME);
+    //             currentCost = nei.second.getWeight(OptimizeBy::COST);
+    //         }
+    //     }
 
-        cout << currentNode << " -> " << nextNode << endl;
-        cout << "Distance : " << currentDistance << " Km" << endl;
-        cout << "Time : " << currentTime << " H" << endl;
-        cout << "Cost : " << currentCost << " Rs." << endl
-             << endl;
+    //     cout << currentNode << " -> " << nextNode << endl;
+    //     cout << "Distance : " << currentDistance << " Km" << endl;
+    //     cout << "Time : " << currentTime << " H" << endl;
+    //     cout << "Cost : " << currentCost << " Rs." << endl
+    //          << endl;
 
-        reqDistance += currentDistance;
-        reqTime += currentTime;
-        reqCost += currentCost;
-    }
+    //     reqDistance += currentDistance;
+    //     reqTime += currentTime;
+    //     reqCost += currentCost;
+    // }
 
-    cout << "Route : ";
-    for (int i = 0; i < path.size() - 1; i++)
-        cout << path[i] << " -> ";
-    cout << path[path.size() - 1] << endl;
+    // cout << "Route : ";
+    // for (int i = 0; i < path.size() - 1; i++)
+    //     cout << path[i] << " -> ";
+    // cout << path[path.size() - 1] << endl;
 
-    cout << "Distance : " << reqDistance << " Km" << endl;
-    cout << "Time : " << reqTime << " H" << endl;
-    cout << "Cost : " << reqCost << " Rs." << endl
-         << endl;
+    // cout << "Distance : " << reqDistance << " Km" << endl;
+    // cout << "Time : " << reqTime << " H" << endl;
+    // cout << "Cost : " << reqCost << " Rs." << endl
+    //      << endl;
 
-    return path;
+    return result;
 }
 
-vector<string> Graph::getOptimalPathAstar(string &source, string &destination, OptimizeBy criteria)
+PathResult Graph::getOptimalPathAstar(string &source, string &destination, OptimizeBy criteria)
 {
+    PathResult result;
     if (source == destination)
     {
-        cout << "Already At Destination" << endl;
-        return {"Already At Destination"};
+        return result;
     }
 
     unordered_map<string, float> optimized;
@@ -298,8 +295,8 @@ vector<string> Graph::getOptimalPathAstar(string &source, string &destination, O
         float dLon = lon2 - lon1;
 
         float a = sin(dLat / 2) * sin(dLat / 2) +
-                   cos(lat1) * cos(lat2) *
-                       sin(dLon / 2) * sin(dLon / 2);
+                  cos(lat1) * cos(lat2) *
+                      sin(dLon / 2) * sin(dLon / 2);
 
         float c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
@@ -318,18 +315,18 @@ vector<string> Graph::getOptimalPathAstar(string &source, string &destination, O
         return straightDistance * 2.0f;
     };
 
-    auto getHeuristic = [&](string current , string destination){
+    auto getHeuristic = [&](string current, string destination)
+    {
         switch (criteria)
         {
         case OptimizeBy::DISTANCE:
-            return getDistanceHeuristic(current , destination);
+            return getDistanceHeuristic(current, destination);
         case OptimizeBy::TIME:
-            return getTimeHeuristic(current , destination);
+            return getTimeHeuristic(current, destination);
         case OptimizeBy::COST:
-            return getCostHeuristic(current , destination);
+            return getCostHeuristic(current, destination);
         default:
-            return getDistanceHeuristic(current , destination);
-
+            return getDistanceHeuristic(current, destination);
         }
     };
 
@@ -346,11 +343,14 @@ vector<string> Graph::getOptimalPathAstar(string &source, string &destination, O
         minHeap.pop();
         if (fNode > optimized[node])
             continue;
+        result.nodeExplored++;
 
+        if (node == destination)
+            break;
         for (auto nei : network[node])
         {
             string neiNode = nei.first;
-            float weight = nei.second.getWeight(OptimizeBy::DISTANCE);
+            float weight = nei.second.getWeight(criteria);
             float g = dis + weight;
             float h = getHeuristic(neiNode, destination);
             if (optimized.find(neiNode) == optimized.end() || g + h < optimized[neiNode])
@@ -363,66 +363,118 @@ vector<string> Graph::getOptimalPathAstar(string &source, string &destination, O
         }
     }
 
-    // temp - Need modification when working on UI and Formatting
     if (parent.find(destination) == parent.end())
     {
         cout << "Can't Reach Destination" << endl;
-        return {"Can't Reach Destination"};
+        return result;
     }
 
-    vector<string> path;
     string node = destination;
     while (parent[node] != node)
     {
-        path.push_back(node);
+        result.path.push_back(node);
         node = parent[node];
     }
-    path.push_back(source);
-    reverse(path.begin(), path.end());
+    result.path.push_back(source);
+    reverse(result.path.begin(), result.path.end());
 
-    cout << "---Route Analysis---\n"
-         << endl;
-    float reqDistance = 0;
-    float reqTime = 0;
-    float reqCost = 0;
+    return result;
+}
 
-    for (int i = 0; i < path.size() - 1; i++)
+void Graph::benchmark()
+{
+    cout << "Benchmarking--" << endl;
+
+    srand(time(0));
+    const int NUM_QUERIES = 20;
+    const int NUM_RUNS = 1000;
+    int nodeCounts = networkElements.size();
+    vector<pair<string, string>> queries;
+    vector<float> executionTimeQueryD;
+    vector<float> executionTimeQueryA;
+
+    for (int i = 0; i < NUM_QUERIES; i++)
     {
-        string currentNode = path[i];
-        string nextNode = path[i + 1];
-        float currentDistance;
-        float currentTime;
-        float currentCost;
-        for (auto nei : network[currentNode])
+        int sourceIndex = rand() % nodeCounts;
+        int destinationIndex = rand() % nodeCounts;
+        unordered_map<string, int> visited;
+        while (!checkReachabilityBFS(networkElements[sourceIndex], networkElements[destinationIndex], visited) || destinationIndex == sourceIndex)
         {
-            if (nei.first == nextNode)
+            destinationIndex = rand() % nodeCounts;
+            visited.clear();
+        }
+        queries.push_back({networkElements[sourceIndex], networkElements[destinationIndex]});
+    }
+
+    vector<float> executionTimeD;
+    vector<float> executionTimeA;
+    float avrageNodesDijkstra = 0;
+    float avrageNodesAstar = 0;
+    for (int i = 0; i < NUM_QUERIES; i++)
+    {
+        int nodesExploredDijkstra = 0;
+        int nodesExploredAstar = 0;
+        bool firstQueryIteration = false;
+        string source = queries[i].first;
+        string destination = queries[i].second;
+        executionTimeD.clear();
+        executionTimeA.clear();
+        for (int j = 0; j < NUM_RUNS; j++)
+        {
+
+            auto start =
+                high_resolution_clock::now();
+            PathResult resultDijkstra = getOptimalPathDijkstra(source, destination, OptimizeBy::DISTANCE);
+            auto stop =
+                high_resolution_clock::now();
+            auto duration =
+                duration_cast<nanoseconds>(
+                    stop - start);
+            executionTimeD.push_back(duration.count());
+
+            start =
+                high_resolution_clock::now();
+            PathResult resultAstar = getOptimalPathAstar(source, destination, OptimizeBy::DISTANCE);
+            stop =
+                high_resolution_clock::now();
+            duration =
+                duration_cast<nanoseconds>(
+                    stop - start);
+            executionTimeA.push_back(duration.count());
+
+            if (!firstQueryIteration)
             {
-                currentDistance = nei.second.getWeight(OptimizeBy::DISTANCE);
-                currentTime = nei.second.getWeight(OptimizeBy::TIME);
-                currentCost = nei.second.getWeight(OptimizeBy::COST);
+                firstQueryIteration = true;
+                nodesExploredDijkstra = resultDijkstra.nodeExplored;
+                nodesExploredAstar = resultAstar.nodeExplored;
             }
         }
 
-        cout << currentNode << " -> " << nextNode << endl;
-        cout << "Distance : " << currentDistance << " Km" << endl;
-        cout << "Time : " << currentTime << " H" << endl;
-        cout << "Cost : " << currentCost << " Rs." << endl
-             << endl;
+        float avrageD = accumulate(executionTimeD.begin(), executionTimeD.end(), 0.0f) / NUM_RUNS;
+        executionTimeQueryD.push_back(avrageD);
+        float avrageA = accumulate(executionTimeA.begin(), executionTimeA.end(), 0.0f) / NUM_RUNS;
+        executionTimeQueryA.push_back(avrageA);
+        avrageNodesDijkstra += nodesExploredDijkstra;
+        avrageNodesAstar += nodesExploredAstar;
 
-        reqDistance += currentDistance;
-        reqTime += currentTime;
-        reqCost += currentCost;
+        // temp
+
+        cout << source << " -> " << destination << endl;
+        cout << "Dijkstra Avg : " << avrageD << " ns \tNodes Explored : " << nodesExploredDijkstra << endl;
+        cout << "A* Avg : " << avrageA << " ns \tNodes Explored : " << nodesExploredAstar << endl
+             << endl;
     }
 
-    cout << "Route : ";
-    for (int i = 0; i < path.size() - 1; i++)
-        cout << path[i] << " -> ";
-    cout << path[path.size() - 1] << endl;
+    avrageNodesDijkstra /= NUM_QUERIES;
+    avrageNodesAstar /= NUM_QUERIES;
+    float overallAvrageD = accumulate(executionTimeQueryD.begin(), executionTimeQueryD.end(), 0.0f) / NUM_QUERIES;
+    float overallAvrageA = accumulate(executionTimeQueryA.begin(), executionTimeQueryA.end(), 0.0f) / NUM_QUERIES;
 
-    cout << "Distance : " << reqDistance << " Km" << endl;
-    cout << "Time : " << reqTime << " H" << endl;
-    cout << "Cost : " << reqCost << " Rs." << endl
-         << endl;
-
-    return path;
+    //temp
+    
+    cout << "Queries ran : " << NUM_QUERIES << endl;
+    cout << "Runs per Query : " << NUM_RUNS << endl;
+    cout << "Dijkstra Avg : " << overallAvrageD << " ns \t Avrage Nodes Explored : " << avrageNodesDijkstra << endl;
+    cout << "A* Avg : " << overallAvrageA << " ns \t Avrage Nodes Explored : " << avrageNodesAstar << endl;
+    cout << "Sped up : " << overallAvrageD / overallAvrageA << "x" << endl;
 }

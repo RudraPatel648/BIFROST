@@ -20,11 +20,11 @@ Bifrost currently can:
 - [x] Reconstruct the path found by Dijkstra
 - [x] Route analysis using distance, time and cost
 - [x] Advanced pathfinding using A*
+- [x] Algorithm benchmarking
 
 ## Future Features
-
-- [ ] Algorithm benchmarking
 - [ ] Polished CLI
+
 
 ## Dataset
 
