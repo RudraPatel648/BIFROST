@@ -1,8 +1,0 @@
-Khambhat 22.32 72.62
-Tarapur 22.49 72.65
-Borsad 22.41 72.89
-Sojitra 22.53 72.71
-Petlad 22.48 72.80
-Bandhani 22.53 72.82
-Karamsad 22.54 72.90
-Anand 22.53 72.93

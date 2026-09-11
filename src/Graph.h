@@ -19,12 +19,26 @@ public:
     int nodeExplored = 0;
 };
 
+struct BenchmarkResult
+{
+    int queries = 0;
+    int runsPerQuery = 0;
+
+    float dijkstraTime = 0.0f;
+    float astarTime = 0.0f;
+
+    float dijkstraNodes = 0.0f;
+    float astarNodes = 0.0f;
+
+    float speedup = 0.0f;
+};
+
 class Edge
 {
 private:
-    float distance;
-    float time;
-    float cost;
+    float distance = 0.0f;
+    float time = 0.0f;
+    float cost = 0.0f;
 
 public:
     Edge()
@@ -59,16 +73,25 @@ public: //
     unordered_map<string, vector<pair<string, Edge>>> network;
     vector<string> networkElements;
     unordered_map<string, pair<float, float>> coordinates;
+    unordered_map<string, int> hash;
 
 public:
-    void loadNetwork(string filename);
-    void checkConnection();
+    void loadNetwork(string networkName, string coordinateFile);
+    BenchmarkResult benchmark();
+
     void checkConnectionDFS(string &current, int &component, unordered_map<int, vector<string>> &components, unordered_map<string, int> &visited);
-    bool checkReachabilityBFS(string &current, string &target, unordered_map<string, int> &visited);
-    bool checkReachabilityDFS(string &current, string &target, unordered_map<string, int> &visited);
+    bool checkReachability(string &current, string &target, unordered_map<string, int> &visited);
+
     PathResult getOptimalPathDijkstra(string &src, string &dest, OptimizeBy criteria);
     PathResult getOptimalPathAstar(string &src, string &dest, OptimizeBy criteria);
-    void benchmark();
+
+    void dfsTraversal(string &current, unordered_map<string, int> &visited, vector<string> &traversal);
+    
+    void traversalDFS(string &current,vector<string> &traversal,unordered_map<string, int> &visited);
+    vector<string> getDFSTraversal(string &start);
+    vector<string> getBFSTraversal(string &start);
+    int getConnectedComponents();
+    int getTotalEdges();
 };
 
 #endif
