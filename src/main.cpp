@@ -47,7 +47,7 @@ void loadNetworkMenu(Graph &bifrost)
 
         cout << YELLOW << "  [1]  Network 1 "<<CYAN<<"  Network Of 100 Connected Nodes \n"<<RESET;
         cout << YELLOW << "  [2]  Network 2 "<<CYAN<<"  Network Of 1000 Connected Nodes \n"<<RESET;
-        cout << YELLOW << "  [3]  Network 3 "<<CYAN<<"  Network Of 100000 Connected Nodes\n"<<RESET;
+        cout << YELLOW << "  [3]  Network 3 "<<CYAN<<"  Network Of 10000 Connected Nodes\n"<<RESET;
         cout << YELLOW << "  [4]  Network 4 "<<CYAN<<"  Network Of Connected Components   \n"<<RESET;
         cout << RED << "  [0]  Exit\n"
              << RESET;
