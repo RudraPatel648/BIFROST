@@ -1,62 +1,150 @@
-# Bifrost
 
-Bifrost is a C++ CLI-based weighted graph project focused on pathfinding and network analysis using Data Structures and Algorithms.
+---
+<div align="center">
 
-The project models a network of interconnected locations and explores graph algorithms through a practical, scalable implementation.
+<img src="assets/logo.png" alt="Bifrost Logo" width="500">
+<p>
+  <b>A C++ command-line project for graph-based network analysis and optimal route finding.</b>
+</p>
 
-## Current Status
+</div>
 
-Bifrost currently can:
+---
 
-- [x] Load a network from a `.txt` dataset
-- [x] Parse locations and their connection properties
-- [x] Construct an undirected weighted graph in memory
-- [x] Perform BFS traversal
-- [x] Perform DFS traversal
-- [x] Check reachability between two locations
-- [x] Find connected components
-- [x] Determine network connectivity
-- [x] Find a minimum-weight path using Dijkstra's algorithm
-- [x] Reconstruct the path found by Dijkstra
-- [x] Route analysis using distance, time and cost
-- [x] Advanced pathfinding using A*
-- [x] Algorithm benchmarking
+Bifrost is a C++ command-line project that models real-world locations as an interconnected network and uses graph algorithms to explore and navigate it.
 
-## Future Features
-- [ ] Polished CLI
+The project focuses on solving route and network analysis problems such as finding an optimal path between two locations based on **distance, time, or cost**. The same system could be extended into applications such as a **train navigation system**, where stations become nodes and railway connections become weighted edges.
 
+---
 
-## Dataset
+# Features
 
-Bifrost currently parses its network data using the file system because the dataset is small and easy to manage during development.
-The network is represented as an **undirected weighted graph**, allowing connections to be traversed in both directions.
+- **Network Analysis**
+- **BFS & DFS Traversal**
+- **Dijkstra & A\* Pathfinding**
+- **Distance, Time & Cost Optimization**
+- **Route Analysis**
+- **Algorithm Benchmarking**
 
-### Example Dataset Format
+---
 
-<!-- Network -->
-Source Destination Distance Time Cost
-Mumbai Surat 280 4.5 500
-Surat Vadodara 150 2.5 300
-Vadodara Ahmedabad 110 2.0 250
+# Features in Action
 
-<!-- Coordinates -->
-Mumbai 22.32 72.62
-Surat 22.49 72.65
-Ahmedabad 22.41 72.89
+## Route Finder
 
-## Tech Stack
+<p align="center">
+  <img src="assets/Demo-RouteFinder.gif" alt="Bifrost Route Finder" width="700">
+</p>
 
-- C++
-- C++ STL
+The Route Finder allows the user to select a source and destination, choose what to optimize, and select either Dijkstra or A\*. Bifrost then calculates and displays the optimal route between the two locations.
 
-## Why "Bifrost"? 🌈
+---
 
-The name is inspired by Marvel's Bifrost — the bridge that connects different realms and enables travel between them.
+## Network Analysis
 
-In a similar way, Bifrost works with connections between locations and finds meaningful paths through the network.
+<p align="center">
+  <img src="assets/Demo-NetworkAnalysis.gif" alt="Bifrost Network Analysis" width="700">
+</p>
 
-## Project Goal
+Network Analysis provides information about the loaded network and allows the user to explore it using BFS and DFS. It also checks connectivity and identifies connected components.
 
-The goal of Bifrost is to build a practical and scalable graph-based system while applying Data Structures and Algorithms to a real-world-inspired problem.
+---
 
-> Connect. Navigate. Analyze.
+## Algorithm Benchmarking
+
+<p align="center">
+  <img src="assets/Demo-Benchmark.gif" alt="Bifrost Algorithm Benchmarking" width="700">
+</p>
+
+Bifrost runs multiple route queries and repeats each query several times to compare Dijkstra and A\*. The benchmark measures **execution time** and **nodes explored**, then calculates the relative speedup.
+
+For example, the benchmark can show that A\* explores fewer nodes than Dijkstra for the same route while also comparing their execution times.
+
+---
+
+# Algorithms
+
+| Algorithm | Purpose | Time Complexity |
+|:---|:---|---:|
+| **BFS** | Network traversal | `O(V + E)` |
+| **DFS** | Network traversal | `O(V + E)` |
+| **Connected Components** | Find connected groups | `O(V + E)` |
+| **Dijkstra** | Optimal weighted path | `O((V + E) log V)` |
+| **A\*** | Heuristic-based optimal path | `O((V + E) log V)`* |
+
+> **Note:** A\* performance depends heavily on the quality of its heuristic.
+
+---
+
+# Project Structure
+
+```text
+Bifrost/
+│
+├── main.cpp
+├── Graph.cpp
+├── Graph.h
+├── build.bat
+│
+├── data/
+│   ├── network_01.txt
+│   ├── network_02.txt
+│   ├── network_03.txt
+│   └── ...
+│
+├── assets/
+│   ├── logo.png
+│   ├── Demo-RouteFinder.gif
+│   ├── Demo-NetworkAnalysis.gif
+│   └── Demo-Benchmark.gif
+│
+└── README.md
+```
+
+- **`main.cpp`** — Handles the CLI, menus, user input, and displaying results.
+- **`Graph.h`** — Defines the graph class, data structures, and public function declarations.
+- **`Graph.cpp`** — Implements network loading, graph algorithms, route analysis, and benchmarking.
+- **`build.bat`** — Compiles and runs the project using `g++`.
+
+---
+
+# Getting Started
+
+Bifrost is designed to run from **Visual Studio's Terminal** on Windows. The terminal is recommended because the interface uses Unicode and ASCII characters for its visual layout.
+
+### Build & Run
+
+Open the project in Visual Studio, open its terminal, and run:
+
+```bat
+build.bat
+```
+
+Or compile manually:
+
+```bat
+g++ main.cpp Graph.cpp -o bifrost
+.\bifrost.exe
+```
+
+---
+
+# Tech Stack
+
+- **C++**
+- **C++ STL**
+
+---
+
+# Project Status
+
+**Completed**
+
+Through Bifrost, I learned:
+
+- How to design and work with weighted graph structures.
+- How BFS, DFS, Dijkstra, and A\* work in a practical system.
+- How to reconstruct and analyze paths after running graph algorithms.
+- How to benchmark algorithms and compare their performance.
+
+---
